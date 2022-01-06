@@ -11,11 +11,11 @@ Begin VB.Form FMain
    ScaleWidth      =   6990
    StartUpPosition =   3  'Windows-Standard
    Begin VB.TextBox Text1 
-      Height          =   375
-      Left            =   0
+      Height          =   315
+      Left            =   15
       TabIndex        =   2
-      Top             =   0
-      Width           =   3615
+      Top             =   30
+      Width           =   3585
    End
    Begin VB.TextBox Text2 
       Height          =   6375
