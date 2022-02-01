@@ -43,32 +43,50 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub Form_Load()
-    
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
     Text1.Font = "Courier New"
     Text2.Font = "Courier New"
     Text1.Text = "Andre"
-'    Dim n As Byte: n = 5
-'    Dim k As Byte: k = 5
-'    ReDim values(0 To k - 1) As Byte
-'    Dim getNext As Boolean
-'    ReDim chars(0 To k - 1) As String
-'    Dim i As Long
-'    chars(i) = "A": i = i + 1
-'    chars(i) = "n": i = i + 1
-'    chars(i) = "d": i = i + 1
-'    chars(i) = "r": i = i + 1
-'    chars(i) = "e"
-'    getNext = True
-'    While getNext
-'        Debug.Print getString(chars, values)
-'        getNext = CombiWReps_getNext(values, n, k)
-'    Wend
+End Sub
+
+Private Sub Form_Resize()
+    Dim L As Single: L = 0
+    Dim T As Single: T = Text2.Top
+    Dim W As Single: W = Me.ScaleWidth
+    Dim H As Single: H = Me.ScaleHeight - T
+    If W > 0 And H > 0 Then Text2.Move L, T, W, H
 End Sub
 
 Private Sub Command1_Click()
-    Text2.Text = GetCombinationsWReputations(Text1.Text)
+    Text2.Text = GetCombinationsWRepetitions(Text1.Text)
 End Sub
+
+Function GetCombinationsWRepetitions(ByVal word As String) As String
+    Dim s As String
+    Dim n As Long: n = Len(word)
+    ReDim values(0 To n - 1) As Long
+    ReDim chars(0 To n - 1) As String
+    Dim i As Long
+    For i = 1 To n
+        chars(i - 1) = Mid$(word, i, 1)
+    Next
+    Do
+        s = s & getString(chars, values) & vbCrLf
+        Dim j As Long: j = n - 1
+        Do
+            If (j < 0) Then Exit Do
+            If values(j) <> n - 1 Then Exit Do
+            j = j - 1
+        Loop
+        If j < 0 Then Exit Do
+        values(j) = values(j) + 1
+        j = j + 1
+        For j = j To n - 1
+            values(j) = values(j - 1)
+        Next
+    Loop
+    GetCombinationsWRepetitions = s
+End Function
 
 Function getString(chars() As String, v() As Long) As String
     Dim s As String
@@ -97,38 +115,3 @@ Function CombiWReps_getNext(values() As Byte, ByVal n As Byte, ByVal k As Byte) 
     Next
     CombiWReps_getNext = True
 End Function
-
-Function GetCombinationsWReputations(ByVal word As String) As String
-    Dim s As String
-    Dim n As Long: n = Len(word)
-    ReDim values(0 To n - 1) As Long
-    ReDim chars(0 To n - 1) As String
-    Dim i As Long
-    For i = 1 To n
-        chars(i - 1) = Mid$(word, i, 1)
-    Next
-    Do
-        s = s & getString(chars, values) & vbCrLf
-        Dim j As Long: j = n - 1
-        Do
-            If (j < 0) Then Exit Do
-            If values(j) <> n - 1 Then Exit Do
-            j = j - 1
-        Loop
-        If j < 0 Then Exit Do
-        values(j) = values(j) + 1
-        j = j + 1
-        For j = j To n - 1
-            values(j) = values(j - 1)
-        Next
-    Loop
-    GetCombinationsWReputations = s
-End Function
-
-Private Sub Form_Resize()
-    Dim L As Single: L = 0
-    Dim T As Single: T = Text2.Top
-    Dim W As Single: W = Me.ScaleWidth
-    Dim H As Single: H = Me.ScaleHeight - T
-    If W > 0 And H > 0 Then Text2.Move L, T, W, H
-End Sub
